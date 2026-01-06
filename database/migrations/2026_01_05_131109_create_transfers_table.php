@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transfers', function (Blueprint $table) {
-             $table->id();
+            $table->id();
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
             $table->foreignId('from_location_id')->constrained('locations')->onDelete('cascade');
             $table->foreignId('to_location_id')->constrained('locations')->onDelete('cascade');
             $table->integer('quantity');
-            $table->string('status')->default('pending'); // pending, completed, cancelled
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->text('notes')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamp('completed_at')->nullable();

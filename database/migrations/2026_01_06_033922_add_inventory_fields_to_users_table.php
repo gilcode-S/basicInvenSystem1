@@ -6,26 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
-            $table->foreignId('location_id')->nullable()->constrained()->onDelete('set null');
+
+            // User role for inventory system
+            $table->enum('role', ['admin', 'staff', 'viewer'])
+                  ->default('staff');
+
+            // Assign user to a location (warehouse/store)
+            $table->foreignId('location_id')
+                  ->nullable()
+                  ->constrained('locations')
+                  ->nullOnDelete();
+
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+
             $table->dropForeign(['location_id']);
-            $table->dropColumn('location_id');
+            $table->dropColumn(['role', 'location_id']);
+
         });
     }
 };
