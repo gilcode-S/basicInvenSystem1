@@ -2,18 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 Route::get('/', function () {
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
+Route::get('/locations', function () {
+    return Inertia::render('Locations/Index');
+})->middleware(['auth', 'verified'])->name('locations');
 
-require __DIR__.'/settings.php';
+Route::get('/items', function () {
+    return Inertia::render('Items/Index');
+})->middleware(['auth', 'verified'])->name('items');
+
+Route::get('/transfers', function () {
+    return Inertia::render('Transfers/Index');
+})->middleware(['auth', 'verified'])->name('transfers');
+
+Route::get('/reports', function () {
+    return Inertia::render('Reports/Index');
+})->middleware(['auth', 'verified'])->name('reports');
